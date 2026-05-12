@@ -17,8 +17,12 @@ namespace PixalLap
 
         private ColorProcessingService colorProcessingService =
     new ColorProcessingService();
+
         private HSVProcessingService hsvProcessingService =
     new HSVProcessingService();
+
+        private CMYKProcessingService cmykProcessingService =
+    new CMYKProcessingService();
 
         public MainWindow()
         {
@@ -88,29 +92,28 @@ namespace PixalLap
             e.Handled = true;
         }
 
-        private void RGBSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void RGBSlider_ValueChanged(
+     object sender,
+     RoutedPropertyChangedEventArgs<double> e)
         {
-            if (currentImage == null)
+            if (!IsLoaded)
                 return;
 
-            double red = RedSlider.Value;
-            double green = GreenSlider.Value;
-            double blue = BlueSlider.Value;
+            if (RedValueText == null ||
+                GreenValueText == null ||
+                BlueValueText == null)
+                return;
 
-            RedValueText.Text = red.ToString("0.0");
-            GreenValueText.Text = green.ToString("0.0");
-            BlueValueText.Text = blue.ToString("0.0");
+            RedValueText.Text =
+                RedSlider.Value.ToString("0.0");
 
-            BitmapSource processedImage =
-                colorProcessingService.AdjustRGBChannels(
-                    originalImage,
-                    red,
-                    green,
-                    blue);
+            GreenValueText.Text =
+                GreenSlider.Value.ToString("0.0");
 
-            currentImage = ConvertBitmapSourceToBitmapImage(processedImage);
+            BlueValueText.Text =
+                BlueSlider.Value.ToString("0.0");
 
-            MainImage.Source = currentImage;
+            RenderCurrentColorSpace();
         }
 
         private BitmapImage ConvertBitmapSourceToBitmapImage(BitmapSource bitmapSource)
@@ -143,10 +146,13 @@ namespace PixalLap
             }
         }
         private void ColorSpaceComboBox_SelectionChanged(
-      object sender,
-      SelectionChangedEventArgs e)
+     object sender,
+     SelectionChangedEventArgs e)
         {
             if (!IsLoaded)
+                return;
+
+            if (ColorSpaceComboBox.SelectedItem == null)
                 return;
 
             ComboBoxItem selectedItem =
@@ -158,37 +164,46 @@ namespace PixalLap
             string selectedSpace =
                 selectedItem.Content.ToString();
 
-            RGBPanel.Visibility = Visibility.Collapsed;
-            HSVPanel.Visibility = Visibility.Collapsed;
+            RGBPanel.Visibility =
+                Visibility.Collapsed;
+
+            HSVPanel.Visibility =
+                Visibility.Collapsed;
+
+            CMYKPanel.Visibility =
+                Visibility.Collapsed;
 
             if (selectedSpace == "RGB")
             {
-                RGBPanel.Visibility = Visibility.Visible;
+                RGBPanel.Visibility =
+                    Visibility.Visible;
             }
             else if (selectedSpace == "HSV")
             {
-                HSVPanel.Visibility = Visibility.Visible;
+                HSVPanel.Visibility =
+                    Visibility.Visible;
             }
+            else if (selectedSpace == "CMYK")
+            {
+                CMYKPanel.Visibility =
+                    Visibility.Visible;
+            }
+
+            RenderCurrentColorSpace();
         }
+
         private void HSVSlider_ValueChanged(
      object sender,
      RoutedPropertyChangedEventArgs<double> e)
         {
-            // حماية أثناء تحميل الواجهة
             if (!IsLoaded)
                 return;
 
-            // حماية إذا ما في صورة
-            if (originalImage == null)
+            if (HueValueText == null ||
+                SaturationValueText == null ||
+                ValueValueText == null)
                 return;
 
-            // حماية من العناصر غير الجاهزة
-            if (HueSlider == null ||
-                SaturationSlider == null ||
-                ValueSlider == null)
-                return;
-
-            // تحديث النصوص
             HueValueText.Text =
                 HueSlider.Value.ToString("0");
 
@@ -198,29 +213,99 @@ namespace PixalLap
             ValueValueText.Text =
                 ValueSlider.Value.ToString("0.0");
 
-            // قراءة القيم
-            double hue =
-                HueSlider.Value;
+            RenderCurrentColorSpace();
+        }
 
-            double saturation =
-                SaturationSlider.Value;
+        private void CMYKSlider_ValueChanged(
+    object sender,
+    RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (!IsLoaded)
+                return;
 
-            double value =
-                ValueSlider.Value;
+            if (CyanValueText == null ||
+                MagentaValueText == null ||
+                YellowValueText == null ||
+                BlackValueText == null)
+                return;
 
-            // معالجة الصورة
-            BitmapSource processedImage =
-                hsvProcessingService.AdjustHSV(
-                    originalImage,
-                    hue,
-                    saturation,
-                    value);
+            CyanValueText.Text =
+                CyanSlider.Value.ToString("0.0");
 
-            // تحديث current image
+            MagentaValueText.Text =
+                MagentaSlider.Value.ToString("0.0");
+
+            YellowValueText.Text =
+                YellowSlider.Value.ToString("0.0");
+
+            BlackValueText.Text =
+                BlackSlider.Value.ToString("0.0");
+
+            RenderCurrentColorSpace();
+        }
+
+        private void RenderCurrentColorSpace()
+        {
+            // حماية
+            if (!IsLoaded)
+                return;
+
+            if (originalImage == null)
+                return;
+
+            if (ColorSpaceComboBox.SelectedItem == null)
+                return;
+
+            ComboBoxItem selectedItem =
+                ColorSpaceComboBox.SelectedItem as ComboBoxItem;
+
+            if (selectedItem == null)
+                return;
+
+            string selectedSpace =
+                selectedItem.Content.ToString();
+
+            BitmapSource processedImage = null;
+
+            // RGB
+            if (selectedSpace == "RGB")
+            {
+                processedImage =
+                    colorProcessingService.AdjustRGBChannels(
+                        originalImage,
+                        RedSlider.Value,
+                        GreenSlider.Value,
+                        BlueSlider.Value);
+            }
+
+            // HSV
+            else if (selectedSpace == "HSV")
+            {
+                processedImage =
+                    hsvProcessingService.AdjustHSV(
+                        originalImage,
+                        HueSlider.Value,
+                        SaturationSlider.Value,
+                        ValueSlider.Value);
+            }
+            else if (selectedSpace == "CMYK")
+            {
+                processedImage =
+                    cmykProcessingService.AdjustCMYK(
+                        originalImage,
+                        CyanSlider.Value,
+                        MagentaSlider.Value,
+                        YellowSlider.Value,
+                        BlackSlider.Value);
+            }
+
+            // حماية
+            if (processedImage == null)
+                return;
+
             currentImage =
                 ConvertBitmapSourceToBitmapImage(processedImage);
 
-            // عرض الصورة
             MainImage.Source =
                 currentImage;
         }

@@ -66,6 +66,7 @@
 
                         <ComboBoxItem Content="RGB"/>
                         <ComboBoxItem Content="HSV"/>
+                        <ComboBoxItem Content="CMYK"/>
 
                     </ComboBox.Items>
 
@@ -159,6 +160,64 @@
                     <TextBlock x:Name="ValueValueText"
                                Text="1.0"
                                Margin="0,0,0,10"/>
+
+                </StackPanel>
+                <!-- CMYK PANEL -->
+
+                <StackPanel x:Name="CMYKPanel"
+            Visibility="Collapsed">
+
+                    <TextBlock Text="Cyan"/>
+
+                    <Slider x:Name="CyanSlider"
+            Minimum="0"
+            Maximum="2"
+            Value="1"
+            TickFrequency="0.1"
+            ValueChanged="CMYKSlider_ValueChanged"/>
+
+                    <TextBlock x:Name="CyanValueText"
+               Text="1.0"
+               Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Magenta"/>
+
+                    <Slider x:Name="MagentaSlider"
+            Minimum="0"
+            Maximum="2"
+            Value="1"
+            TickFrequency="0.1"
+            ValueChanged="CMYKSlider_ValueChanged"/>
+
+                    <TextBlock x:Name="MagentaValueText"
+               Text="1.0"
+               Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Yellow"/>
+
+                    <Slider x:Name="YellowSlider"
+            Minimum="0"
+            Maximum="2"
+            Value="1"
+            TickFrequency="0.1"
+            ValueChanged="CMYKSlider_ValueChanged"/>
+
+                    <TextBlock x:Name="YellowValueText"
+               Text="1.0"
+               Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Black"/>
+
+                    <Slider x:Name="BlackSlider"
+            Minimum="0"
+            Maximum="2"
+            Value="1"
+            TickFrequency="0.1"
+            ValueChanged="CMYKSlider_ValueChanged"/>
+
+                    <TextBlock x:Name="BlackValueText"
+               Text="1.0"
+               Margin="0,0,0,10"/>
 
                 </StackPanel>
 
