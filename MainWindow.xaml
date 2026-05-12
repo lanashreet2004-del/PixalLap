@@ -12,88 +12,159 @@
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
 
-        <!-- مكان عرض الصورة -->
+        <!-- IMAGE AREA -->
         <Border Grid.Column="0"
-        Margin="10"
-        BorderBrush="Gray"
-        BorderThickness="2"
-        Background="LightGray"
-        AllowDrop="True"
-        Drop="ImageDropArea_Drop"
-        DragOver="ImageDropArea_DragOver">
+                Margin="10"
+                BorderBrush="Gray"
+                BorderThickness="2"
+                Background="LightGray"
+                AllowDrop="True"
+                Drop="ImageDropArea_Drop"
+                DragOver="ImageDropArea_DragOver">
 
             <Image x:Name="MainImage"
-           Stretch="Uniform"/>
+                   Stretch="Uniform"/>
 
         </Border>
-        <!-- الأزرار -->
-        <StackPanel Grid.Column="1"
-                    Margin="10">
 
-            <Button Content="Open Image"
-                    Height="40"
-                    Margin="0,0,0,10"
-                    Click="OpenImage_Click"/>
-            <Button Content="Save Image"
-        Height="40"
-        Margin="0,0,0,10"
-        Click="SaveImage_Click"/>
-            <Button Content="Reset Image"
-        Height="40"
-        Margin="0,0,0,10"
-        Click="ResetImage_Click"/>
+        <!-- CONTROL PANEL -->
+        <ScrollViewer Grid.Column="1"
+                      VerticalScrollBarVisibility="Auto">
 
-            <TextBlock Text="Color Space"
-           FontWeight="Bold"
-           Margin="0,10,0,5"/>
+            <StackPanel Margin="10">
 
-            <ComboBox x:Name="ColorSpaceComboBox"
+                <!-- IMAGE BUTTONS -->
+
+                <Button Content="Open Image"
+                        Height="40"
+                        Margin="0,0,0,10"
+                        Click="OpenImage_Click"/>
+
+                <Button Content="Save Image"
+                        Height="40"
+                        Margin="0,0,0,10"
+                        Click="SaveImage_Click"/>
+
+                <Button Content="Reset Image"
+                        Height="40"
+                        Margin="0,0,0,20"
+                        Click="ResetImage_Click"/>
+
+                <!-- COLOR SPACE -->
+
+                <TextBlock Text="Color Space"
+                           FontWeight="Bold"
+                           FontSize="16"
+                           Margin="0,0,0,5"/>
+
+                <ComboBox x:Name="ColorSpaceComboBox"
           SelectedIndex="0"
-          Margin="0,0,0,20">
+          Margin="0,0,0,20"
+          SelectionChanged="ColorSpaceComboBox_SelectionChanged">
 
-                <ComboBoxItem Content="RGB"/>
-                <ComboBoxItem Content="HSV"/>
-                <ComboBoxItem Content="CMYK"/>
+                    <ComboBox.Items>
 
-            </ComboBox>
+                        <ComboBoxItem Content="RGB"/>
+                        <ComboBoxItem Content="HSV"/>
 
-            <TextBlock Text="Red"/>
-            <Slider x:Name="RedSlider"
-        Minimum="0"
-        Maximum="2"
-        Value="1"
-        TickFrequency="0.1"
-        ValueChanged="RGBSlider_ValueChanged"/>
+                    </ComboBox.Items>
 
-            <TextBlock x:Name="RedValueText"
-           Text="1.0"
-           Margin="0,0,0,10"/>
+                </ComboBox>
 
-            <TextBlock Text="Green"/>
-            <Slider x:Name="GreenSlider"
-        Minimum="0"
-        Maximum="2"
-        Value="1"
-        TickFrequency="0.1"
-        ValueChanged="RGBSlider_ValueChanged"/>
+                <!-- RGB PANEL -->
 
-            <TextBlock x:Name="GreenValueText"
-           Text="1.0"
-           Margin="0,0,0,10"/>
+                <StackPanel x:Name="RGBPanel">
 
-            <TextBlock Text="Blue"/>
-            <Slider x:Name="BlueSlider"
-        Minimum="0"
-        Maximum="2"
-        Value="1"
-        TickFrequency="0.1"
-        ValueChanged="RGBSlider_ValueChanged"/>
+                    <TextBlock Text="Red"/>
 
-            <TextBlock x:Name="BlueValueText"
-           Text="1.0"
-           Margin="0,0,0,10"/>
+                    <Slider x:Name="RedSlider"
+                            Minimum="0"
+                            Maximum="2"
+                            Value="1"
+                            TickFrequency="0.1"
+                            ValueChanged="RGBSlider_ValueChanged"/>
 
-        </StackPanel>
+                    <TextBlock x:Name="RedValueText"
+                               Text="1.0"
+                               Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Green"/>
+
+                    <Slider x:Name="GreenSlider"
+                            Minimum="0"
+                            Maximum="2"
+                            Value="1"
+                            TickFrequency="0.1"
+                            ValueChanged="RGBSlider_ValueChanged"/>
+
+                    <TextBlock x:Name="GreenValueText"
+                               Text="1.0"
+                               Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Blue"/>
+
+                    <Slider x:Name="BlueSlider"
+                            Minimum="0"
+                            Maximum="2"
+                            Value="1"
+                            TickFrequency="0.1"
+                            ValueChanged="RGBSlider_ValueChanged"/>
+
+                    <TextBlock x:Name="BlueValueText"
+                               Text="1.0"
+                               Margin="0,0,0,10"/>
+
+                </StackPanel>
+
+                <!-- HSV PANEL -->
+
+                <StackPanel x:Name="HSVPanel"
+                            Visibility="Collapsed">
+
+                    <TextBlock Text="Hue"/>
+
+                    <Slider x:Name="HueSlider"
+                            Minimum="-180"
+                            Maximum="180"
+                            Value="0"
+                            TickFrequency="1"
+                            ValueChanged="HSVSlider_ValueChanged"/>
+
+                    <TextBlock x:Name="HueValueText"
+                               Text="0"
+                               Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Saturation"/>
+
+                    <Slider x:Name="SaturationSlider"
+                            Minimum="0"
+                            Maximum="2"
+                            Value="1"
+                            TickFrequency="0.1"
+                            ValueChanged="HSVSlider_ValueChanged"/>
+
+                    <TextBlock x:Name="SaturationValueText"
+                               Text="1.0"
+                               Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Value"/>
+
+                    <Slider x:Name="ValueSlider"
+                            Minimum="0"
+                            Maximum="2"
+                            Value="1"
+                            TickFrequency="0.1"
+                            ValueChanged="HSVSlider_ValueChanged"/>
+
+                    <TextBlock x:Name="ValueValueText"
+                               Text="1.0"
+                               Margin="0,0,0,10"/>
+
+                </StackPanel>
+
+            </StackPanel>
+
+        </ScrollViewer>
 
     </Grid>
 

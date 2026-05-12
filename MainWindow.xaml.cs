@@ -3,6 +3,7 @@ using PixalLap.Services;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System;
+using System.Windows.Controls;
 
 
 namespace PixalLap
@@ -16,6 +17,8 @@ namespace PixalLap
 
         private ColorProcessingService colorProcessingService =
     new ColorProcessingService();
+        private HSVProcessingService hsvProcessingService =
+    new HSVProcessingService();
 
         public MainWindow()
         {
@@ -138,6 +141,88 @@ namespace PixalLap
 
                 return bitmapImage;
             }
+        }
+        private void ColorSpaceComboBox_SelectionChanged(
+      object sender,
+      SelectionChangedEventArgs e)
+        {
+            if (!IsLoaded)
+                return;
+
+            ComboBoxItem selectedItem =
+                ColorSpaceComboBox.SelectedItem as ComboBoxItem;
+
+            if (selectedItem == null)
+                return;
+
+            string selectedSpace =
+                selectedItem.Content.ToString();
+
+            RGBPanel.Visibility = Visibility.Collapsed;
+            HSVPanel.Visibility = Visibility.Collapsed;
+
+            if (selectedSpace == "RGB")
+            {
+                RGBPanel.Visibility = Visibility.Visible;
+            }
+            else if (selectedSpace == "HSV")
+            {
+                HSVPanel.Visibility = Visibility.Visible;
+            }
+        }
+        private void HSVSlider_ValueChanged(
+     object sender,
+     RoutedPropertyChangedEventArgs<double> e)
+        {
+            // حماية أثناء تحميل الواجهة
+            if (!IsLoaded)
+                return;
+
+            // حماية إذا ما في صورة
+            if (originalImage == null)
+                return;
+
+            // حماية من العناصر غير الجاهزة
+            if (HueSlider == null ||
+                SaturationSlider == null ||
+                ValueSlider == null)
+                return;
+
+            // تحديث النصوص
+            HueValueText.Text =
+                HueSlider.Value.ToString("0");
+
+            SaturationValueText.Text =
+                SaturationSlider.Value.ToString("0.0");
+
+            ValueValueText.Text =
+                ValueSlider.Value.ToString("0.0");
+
+            // قراءة القيم
+            double hue =
+                HueSlider.Value;
+
+            double saturation =
+                SaturationSlider.Value;
+
+            double value =
+                ValueSlider.Value;
+
+            // معالجة الصورة
+            BitmapSource processedImage =
+                hsvProcessingService.AdjustHSV(
+                    originalImage,
+                    hue,
+                    saturation,
+                    value);
+
+            // تحديث current image
+            currentImage =
+                ConvertBitmapSourceToBitmapImage(processedImage);
+
+            // عرض الصورة
+            MainImage.Source =
+                currentImage;
         }
     }
 }
