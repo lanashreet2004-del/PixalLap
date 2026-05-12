@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using System;
 using System.Windows.Controls;
+using System.IO;
 
 
 namespace PixalLap
@@ -12,6 +13,8 @@ namespace PixalLap
     {
         private BitmapImage originalImage;
         private BitmapImage currentImage;
+        private bool isResetting = false;
+        private string currentImagePath;
 
         private ImageService imageService = new ImageService();
 
@@ -45,10 +48,12 @@ namespace PixalLap
             if (dialog.ShowDialog() == true)
             {
                 originalImage = imageService.LoadImage(dialog.FileName);
+                currentImagePath = dialog.FileName;
 
                 currentImage = originalImage;
 
                 MainImage.Source = currentImage;
+
             }
         }
 
@@ -62,14 +67,46 @@ namespace PixalLap
         }
 
         // إعادة ضبط الصورة
-        private void ResetImage_Click(object sender, RoutedEventArgs e)
+        private void ResetImage_Click(
+    object sender,
+    RoutedEventArgs e)
         {
-            if (originalImage != null)
-            {
-                currentImage = originalImage;
+            if (originalImage == null)
+                return;
 
-                MainImage.Source = currentImage;
-            }
+            isResetting = true;
+
+            // Reset RGB
+            RedSlider.Value = 1;
+            GreenSlider.Value = 1;
+            BlueSlider.Value = 1;
+
+            // Reset HSV
+            HueSlider.Value = 0;
+            SaturationSlider.Value = 1;
+            ValueSlider.Value = 1;
+
+            // Reset CMYK
+            CyanSlider.Value = 1;
+            MagentaSlider.Value = 1;
+            YellowSlider.Value = 1;
+            BlackSlider.Value = 1;
+
+            // Reset YCbCr
+            YSlider.Value = 1;
+            CbSlider.Value = 1;
+            CrSlider.Value = 1;
+
+            // Reset YUV
+            YUVYSlider.Value = 1;
+            USlider.Value = 1;
+            VSlider.Value = 1;
+
+            currentImage = originalImage;
+
+            MainImage.Source = currentImage;
+
+            isResetting = false;
         }
 
         // السحب والإفلات
@@ -82,6 +119,7 @@ namespace PixalLap
                 if (files.Length > 0)
                 {
                     originalImage = imageService.LoadImage(files[0]);
+                    currentImagePath = files[0];
 
                     currentImage = originalImage;
 
@@ -318,6 +356,9 @@ namespace PixalLap
 
         private void RenderCurrentColorSpace()
         {
+
+            if (isResetting)
+                return;
             // حماية
             if (!IsLoaded)
                 return;
@@ -401,6 +442,51 @@ namespace PixalLap
 
             MainImage.Source =
                 currentImage;
+        }
+        private void ImageInfo_Click(
+    object sender,
+    RoutedEventArgs e)
+        {
+            if (originalImage == null ||
+                string.IsNullOrEmpty(currentImagePath))
+            {
+                MessageBox.Show(
+                    "No image loaded!",
+                    "Image Information",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return;
+            }
+
+            FileInfo fileInfo =
+                new FileInfo(currentImagePath);
+
+            double sizeInKB =
+                fileInfo.Length / 1024.0;
+
+            string info =
+                $"Name: {fileInfo.Name}\n\n" +
+
+                $"Format: {fileInfo.Extension}\n\n" +
+
+                $"Size: {sizeInKB:F2} KB\n\n" +
+
+                $"Resolution: " +
+                $"{originalImage.PixelWidth} x " +
+                $"{originalImage.PixelHeight}\n\n" +
+
+                $"DPI: " +
+                $"{originalImage.DpiX} x " +
+                $"{originalImage.DpiY}\n\n" +
+
+                $"Path:\n{currentImagePath}";
+
+            MessageBox.Show(
+                info,
+                "Image Information",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
     }
 }

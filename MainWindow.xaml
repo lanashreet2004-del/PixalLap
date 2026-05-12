@@ -50,6 +50,11 @@
                         Margin="0,0,0,20"
                         Click="ResetImage_Click"/>
 
+                <Button Content="Image Info"
+        Height="40"
+        Margin="0,0,0,20"
+        Click="ImageInfo_Click"/>
+
                 <!-- COLOR SPACE -->
 
                 <TextBlock Text="Color Space"
