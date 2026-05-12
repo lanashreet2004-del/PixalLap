@@ -161,5 +161,64 @@ namespace PixalLap.Services
 
             return rgb;
         }
+
+        public YCbCrColor RGBToYCbCr(RGBColor rgb)
+        {
+            YCbCrColor ycbcr = new YCbCrColor();
+
+            ycbcr.Y =
+                (0.299 * rgb.R) +
+                (0.587 * rgb.G) +
+                (0.114 * rgb.B);
+
+            ycbcr.Cb =
+                128 -
+                (0.168736 * rgb.R) -
+                (0.331264 * rgb.G) +
+                (0.5 * rgb.B);
+
+            ycbcr.Cr =
+                128 +
+                (0.5 * rgb.R) -
+                (0.418688 * rgb.G) -
+                (0.081312 * rgb.B);
+
+            return ycbcr;
+        }
+
+        public RGBColor YCbCrToRGB(YCbCrColor ycbcr)
+        {
+            RGBColor rgb = new RGBColor();
+
+            rgb.R =
+                ycbcr.Y +
+                1.402 * (ycbcr.Cr - 128);
+
+            rgb.G =
+                ycbcr.Y -
+                0.344136 * (ycbcr.Cb - 128) -
+                0.714136 * (ycbcr.Cr - 128);
+
+            rgb.B =
+                ycbcr.Y +
+                1.772 * (ycbcr.Cb - 128);
+
+            rgb.R = ClampRGB(rgb.R);
+            rgb.G = ClampRGB(rgb.G);
+            rgb.B = ClampRGB(rgb.B);
+
+            return rgb;
+        }
+
+        private double ClampRGB(double value)
+        {
+            if (value < 0)
+                return 0;
+
+            if (value > 255)
+                return 255;
+
+            return value;
+        }
     }
 }

@@ -67,6 +67,7 @@
                         <ComboBoxItem Content="RGB"/>
                         <ComboBoxItem Content="HSV"/>
                         <ComboBoxItem Content="CMYK"/>
+                        <ComboBoxItem Content="YCbCr"/>
 
                     </ComboBox.Items>
 
@@ -216,6 +217,52 @@
             ValueChanged="CMYKSlider_ValueChanged"/>
 
                     <TextBlock x:Name="BlackValueText"
+               Text="1.0"
+               Margin="0,0,0,10"/>
+
+                </StackPanel>
+
+                <!-- YCbCr PANEL -->
+
+                <StackPanel x:Name="YCbCrPanel"
+            Visibility="Collapsed">
+
+                    <TextBlock Text="Y"/>
+
+                    <Slider x:Name="YSlider"
+            Minimum="0"
+            Maximum="2"
+            Value="1"
+            TickFrequency="0.1"
+            ValueChanged="YCbCrSlider_ValueChanged"/>
+
+                    <TextBlock x:Name="YValueText"
+               Text="1.0"
+               Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Cb"/>
+
+                    <Slider x:Name="CbSlider"
+            Minimum="0"
+            Maximum="2"
+            Value="1"
+            TickFrequency="0.1"
+            ValueChanged="YCbCrSlider_ValueChanged"/>
+
+                    <TextBlock x:Name="CbValueText"
+               Text="1.0"
+               Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Cr"/>
+
+                    <Slider x:Name="CrSlider"
+            Minimum="0"
+            Maximum="2"
+            Value="1"
+            TickFrequency="0.1"
+            ValueChanged="YCbCrSlider_ValueChanged"/>
+
+                    <TextBlock x:Name="CrValueText"
                Text="1.0"
                Margin="0,0,0,10"/>
 

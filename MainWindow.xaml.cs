@@ -24,6 +24,9 @@ namespace PixalLap
         private CMYKProcessingService cmykProcessingService =
     new CMYKProcessingService();
 
+        private YCbCrProcessingService ycbcrProcessingService =
+    new YCbCrProcessingService();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -173,6 +176,9 @@ namespace PixalLap
             CMYKPanel.Visibility =
                 Visibility.Collapsed;
 
+            YCbCrPanel.Visibility =
+                 Visibility.Collapsed;
+
             if (selectedSpace == "RGB")
             {
                 RGBPanel.Visibility =
@@ -186,6 +192,12 @@ namespace PixalLap
             else if (selectedSpace == "CMYK")
             {
                 CMYKPanel.Visibility =
+                    Visibility.Visible;
+            }
+
+            else if (selectedSpace == "YCbCr")
+            {
+                YCbCrPanel.Visibility =
                     Visibility.Visible;
             }
 
@@ -244,6 +256,30 @@ namespace PixalLap
             RenderCurrentColorSpace();
         }
 
+        private void YCbCrSlider_ValueChanged(
+    object sender,
+    RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (!IsLoaded)
+                return;
+
+            if (YValueText == null ||
+                CbValueText == null ||
+                CrValueText == null)
+                return;
+
+            YValueText.Text =
+                YSlider.Value.ToString("0.0");
+
+            CbValueText.Text =
+                CbSlider.Value.ToString("0.0");
+
+            CrValueText.Text =
+                CrSlider.Value.ToString("0.0");
+
+            RenderCurrentColorSpace();
+        }
+
         private void RenderCurrentColorSpace()
         {
             // حماية
@@ -288,6 +324,7 @@ namespace PixalLap
                         SaturationSlider.Value,
                         ValueSlider.Value);
             }
+            // CMYK
             else if (selectedSpace == "CMYK")
             {
                 processedImage =
@@ -297,6 +334,16 @@ namespace PixalLap
                         MagentaSlider.Value,
                         YellowSlider.Value,
                         BlackSlider.Value);
+            }
+            //YCbCr
+            else if (selectedSpace == "YCbCr")
+            {
+                processedImage =
+                    ycbcrProcessingService.AdjustYCbCr(
+                        originalImage,
+                        YSlider.Value,
+                        CbSlider.Value,
+                        CrSlider.Value);
             }
 
             // حماية
