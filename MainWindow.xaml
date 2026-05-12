@@ -74,6 +74,7 @@
                         <ComboBoxItem Content="CMYK"/>
                         <ComboBoxItem Content="YCbCr"/>
                         <ComboBoxItem Content="YUV"/>
+                        <ComboBoxItem Content="LAB"/>
 
                     </ComboBox.Items>
 
@@ -315,6 +316,52 @@
             ValueChanged="YUVSlider_ValueChanged"/>
 
                     <TextBlock x:Name="VValueText"
+               Text="1.0"
+               Margin="0,0,0,10"/>
+
+                </StackPanel>
+
+                <!-- LAB PANEL -->
+
+                <StackPanel x:Name="LABPanel"
+            Visibility="Collapsed">
+
+                    <TextBlock Text="L"/>
+
+                    <Slider x:Name="LSlider"
+            Minimum="0"
+            Maximum="2"
+            Value="1"
+            TickFrequency="0.1"
+            ValueChanged="LABSlider_ValueChanged"/>
+
+                    <TextBlock x:Name="LValueText"
+               Text="1.0"
+               Margin="0,0,0,10"/>
+
+                    <TextBlock Text="A"/>
+
+                    <Slider x:Name="ASlider"
+            Minimum="-2"
+            Maximum="2"
+            Value="1"
+            TickFrequency="0.1"
+            ValueChanged="LABSlider_ValueChanged"/>
+
+                    <TextBlock x:Name="AValueText"
+               Text="1.0"
+               Margin="0,0,0,10"/>
+
+                    <TextBlock Text="B"/>
+
+                    <Slider x:Name="BSlider"
+            Minimum="-2"
+            Maximum="2"
+            Value="1"
+            TickFrequency="0.1"
+            ValueChanged="LABSlider_ValueChanged"/>
+
+                    <TextBlock x:Name="BValueText"
                Text="1.0"
                Margin="0,0,0,10"/>
 

@@ -265,5 +265,160 @@ namespace PixalLap.Services
 
             return value;
         }
+
+
+        public XYZColor RGBToXYZ(RGBColor rgb)
+        {
+            double r = rgb.R / 255.0;
+            double g = rgb.G / 255.0;
+            double b = rgb.B / 255.0;
+
+            // Gamma correction
+            r = (r > 0.04045)
+                ? Math.Pow((r + 0.055) / 1.055, 2.4)
+                : r / 12.92;
+
+            g = (g > 0.04045)
+                ? Math.Pow((g + 0.055) / 1.055, 2.4)
+                : g / 12.92;
+
+            b = (b > 0.04045)
+                ? Math.Pow((b + 0.055) / 1.055, 2.4)
+                : b / 12.92;
+
+            r *= 100;
+            g *= 100;
+            b *= 100;
+
+            XYZColor xyz = new XYZColor();
+
+            xyz.X =
+                r * 0.4124 +
+                g * 0.3576 +
+                b * 0.1805;
+
+            xyz.Y =
+                r * 0.2126 +
+                g * 0.7152 +
+                b * 0.0722;
+
+            xyz.Z =
+                r * 0.0193 +
+                g * 0.1192 +
+                b * 0.9505;
+
+            return xyz;
+        }
+
+        public LABColor XYZToLAB(XYZColor xyz)
+        {
+            double x = xyz.X / 95.047;
+            double y = xyz.Y / 100.000;
+            double z = xyz.Z / 108.883;
+
+            x = PivotXYZ(x);
+            y = PivotXYZ(y);
+            z = PivotXYZ(z);
+
+            LABColor lab = new LABColor();
+
+            lab.L = (116 * y) - 16;
+
+            lab.A = 500 * (x - y);
+
+            lab.B = 200 * (y - z);
+
+            return lab;
+        }
+
+        private double PivotXYZ(double value)
+        {
+            if (value > 0.008856)
+            {
+                return Math.Pow(value, 1.0 / 3.0);
+            }
+
+            return (7.787 * value) + (16.0 / 116.0);
+        }
+
+
+        public XYZColor LABToXYZ(LABColor lab)
+        {
+            double y =
+                (lab.L + 16) / 116.0;
+
+            double x =
+                (lab.A / 500.0) + y;
+
+            double z =
+                y - (lab.B / 200.0);
+
+            x = InversePivotXYZ(x);
+            y = InversePivotXYZ(y);
+            z = InversePivotXYZ(z);
+
+            XYZColor xyz = new XYZColor();
+
+            xyz.X = x * 95.047;
+            xyz.Y = y * 100.000;
+            xyz.Z = z * 108.883;
+
+            return xyz;
+        }
+
+        public RGBColor XYZToRGB(XYZColor xyz)
+        {
+            double x = xyz.X / 100.0;
+            double y = xyz.Y / 100.0;
+            double z = xyz.Z / 100.0;
+
+            double r =
+                x * 3.2406 +
+                y * -1.5372 +
+                z * -0.4986;
+
+            double g =
+                x * -0.9689 +
+                y * 1.8758 +
+                z * 0.0415;
+
+            double b =
+                x * 0.0557 +
+                y * -0.2040 +
+                z * 1.0570;
+
+            r = (r > 0.0031308)
+                ? 1.055 * Math.Pow(r, 1 / 2.4) - 0.055
+                : r * 12.92;
+
+            g = (g > 0.0031308)
+                ? 1.055 * Math.Pow(g, 1 / 2.4) - 0.055
+                : g * 12.92;
+
+            b = (b > 0.0031308)
+                ? 1.055 * Math.Pow(b, 1 / 2.4) - 0.055
+                : b * 12.92;
+
+            RGBColor rgb = new RGBColor();
+
+            rgb.R = ClampRGB(r * 255);
+            rgb.G = ClampRGB(g * 255);
+            rgb.B = ClampRGB(b * 255);
+
+            return rgb;
+        }
+
+        private double InversePivotXYZ(double value)
+        {
+            double valueCubed =
+                value * value * value;
+
+            if (valueCubed > 0.008856)
+            {
+                return valueCubed;
+            }
+
+            return (value - 16.0 / 116.0) / 7.787;
+        }
     }
 }

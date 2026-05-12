@@ -33,6 +33,9 @@ namespace PixalLap
         private YUVProcessingService yuvProcessingService =
     new YUVProcessingService();
 
+        private LABProcessingService labProcessingService =
+    new LABProcessingService();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -101,6 +104,11 @@ namespace PixalLap
             YUVYSlider.Value = 1;
             USlider.Value = 1;
             VSlider.Value = 1;
+
+            // Reset LAB
+            LSlider.Value = 1;
+            ASlider.Value = 1;
+            BSlider.Value = 1;
 
             currentImage = originalImage;
 
@@ -223,6 +231,9 @@ namespace PixalLap
             YUVPanel.Visibility =
                 Visibility.Collapsed;
 
+            LABPanel.Visibility =
+               Visibility.Collapsed;
+
             if (selectedSpace == "RGB")
             {
                 RGBPanel.Visibility =
@@ -248,6 +259,12 @@ namespace PixalLap
             else if (selectedSpace == "YUV")
             {
                 YUVPanel.Visibility =
+                    Visibility.Visible;
+            }
+
+            else if (selectedSpace == "LAB")
+            {
+                LABPanel.Visibility =
                     Visibility.Visible;
             }
 
@@ -354,6 +371,30 @@ namespace PixalLap
             RenderCurrentColorSpace();
         }
 
+        private void LABSlider_ValueChanged(
+    object sender,
+    RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (!IsLoaded)
+                return;
+
+            if (LValueText == null ||
+                AValueText == null ||
+                BValueText == null)
+                return;
+
+            LValueText.Text =
+                LSlider.Value.ToString("0.0");
+
+            AValueText.Text =
+                ASlider.Value.ToString("0.0");
+
+            BValueText.Text =
+                BSlider.Value.ToString("0.0");
+
+            RenderCurrentColorSpace();
+        }
+
         private void RenderCurrentColorSpace()
         {
 
@@ -433,6 +474,17 @@ namespace PixalLap
                         USlider.Value,
                         VSlider.Value);
             }
+
+            //LAB 
+            else if (selectedSpace == "LAB")
+            {
+                processedImage =
+                    labProcessingService.AdjustLAB(
+                        originalImage,
+                        LSlider.Value,
+                        ASlider.Value,
+                        BSlider.Value);
+            }
             // حماية
             if (processedImage == null)
                 return;
@@ -443,6 +495,8 @@ namespace PixalLap
             MainImage.Source =
                 currentImage;
         }
+
+
         private void ImageInfo_Click(
     object sender,
     RoutedEventArgs e)
