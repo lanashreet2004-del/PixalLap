@@ -1,11 +1,17 @@
 ﻿<Window x:Class="PixalLap.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:h="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Wpf"         xmlns:views="clr-namespace:PixalLap.Views"
         Title="PixelLab"
         Height="600"
         Width="1000">
 
     <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*" />
@@ -14,6 +20,7 @@
 
         <!-- IMAGE AREA -->
         <Border Grid.Column="0"
+                Grid.Row="0"
                 Margin="10"
                 BorderBrush="Gray"
                 BorderThickness="2"
@@ -23,12 +30,14 @@
                 DragOver="ImageDropArea_DragOver">
 
             <Image x:Name="MainImage"
-                   Stretch="Uniform"/>
+       Stretch="Uniform"
+       MouseLeftButtonDown="MainImage_MouseLeftButtonDown"/>
 
         </Border>
 
         <!-- CONTROL PANEL -->
         <ScrollViewer Grid.Column="1"
+                      Grid.RowSpan="2"
                       VerticalScrollBarVisibility="Auto">
 
             <StackPanel Margin="10">
@@ -370,6 +379,11 @@
             </StackPanel>
 
         </ScrollViewer>
+        <!-- 3D COLOR SPACE -->
+
+        <views:RGBSpaceView x:Name="RgbSpaceView"
+                    Grid.Row="1"
+                    Grid.Column="0"/>
 
     </Grid>
 

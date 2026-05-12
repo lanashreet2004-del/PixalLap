@@ -5,6 +5,8 @@ using System.Windows.Media.Imaging;
 using System;
 using System.Windows.Controls;
 using System.IO;
+using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 
 namespace PixalLap
@@ -39,6 +41,7 @@ namespace PixalLap
         public MainWindow()
         {
             InitializeComponent();
+
         }
 
         // فتح صورة
@@ -541,6 +544,43 @@ namespace PixalLap
                 "Image Information",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
+        }
+
+        private void MainImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MainImage.Source is BitmapSource bitmap)
+            {
+                // موقع الضغط
+                var position = e.GetPosition(MainImage);
+
+                // تحويل الإحداثيات
+                int x = (int)(position.X * bitmap.PixelWidth / MainImage.ActualWidth);
+                int y = (int)(position.Y * bitmap.PixelHeight / MainImage.ActualHeight);
+
+                // منع الخروج عن الحدود
+                if (x < 0 || y < 0 ||
+                    x >= bitmap.PixelWidth ||
+                    y >= bitmap.PixelHeight)
+                {
+                    return;
+                }
+
+                // قراءة البكسل
+                byte[] pixel = new byte[4];
+
+                bitmap.CopyPixels(
+                    new Int32Rect(x, y, 1, 1),
+                    pixel,
+                    4,
+                    0);
+
+                byte b = pixel[0];
+                byte g = pixel[1];
+                byte r = pixel[2];
+
+                // تحديث الـMarker
+                RgbSpaceView.UpdateSelectedColor(r, g, b);
+            }
         }
     }
 }
