@@ -68,6 +68,7 @@
                         <ComboBoxItem Content="HSV"/>
                         <ComboBoxItem Content="CMYK"/>
                         <ComboBoxItem Content="YCbCr"/>
+                        <ComboBoxItem Content="YUV"/>
 
                     </ComboBox.Items>
 
@@ -263,6 +264,52 @@
             ValueChanged="YCbCrSlider_ValueChanged"/>
 
                     <TextBlock x:Name="CrValueText"
+               Text="1.0"
+               Margin="0,0,0,10"/>
+
+                </StackPanel>
+
+                <!-- YUV PANEL -->
+
+                <StackPanel x:Name="YUVPanel"
+            Visibility="Collapsed">
+
+                    <TextBlock Text="Y"/>
+
+                    <Slider x:Name="YUVYSlider"
+            Minimum="0"
+            Maximum="2"
+            Value="1"
+            TickFrequency="0.1"
+            ValueChanged="YUVSlider_ValueChanged"/>
+
+                    <TextBlock x:Name="YUVYValueText"
+               Text="1.0"
+               Margin="0,0,0,10"/>
+
+                    <TextBlock Text="U"/>
+
+                    <Slider x:Name="USlider"
+            Minimum="0"
+            Maximum="2"
+            Value="1"
+            TickFrequency="0.1"
+            ValueChanged="YUVSlider_ValueChanged"/>
+
+                    <TextBlock x:Name="UValueText"
+               Text="1.0"
+               Margin="0,0,0,10"/>
+
+                    <TextBlock Text="V"/>
+
+                    <Slider x:Name="VSlider"
+            Minimum="0"
+            Maximum="2"
+            Value="1"
+            TickFrequency="0.1"
+            ValueChanged="YUVSlider_ValueChanged"/>
+
+                    <TextBlock x:Name="VValueText"
                Text="1.0"
                Margin="0,0,0,10"/>
 

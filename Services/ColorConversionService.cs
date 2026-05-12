@@ -209,6 +209,51 @@ namespace PixalLap.Services
 
             return rgb;
         }
+        public YUVColor RGBToYUV(RGBColor rgb)
+        {
+            YUVColor yuv = new YUVColor();
+
+            yuv.Y =
+                (0.299 * rgb.R) +
+                (0.587 * rgb.G) +
+                (0.114 * rgb.B);
+
+            yuv.U =
+                (-0.14713 * rgb.R) -
+                (0.28886 * rgb.G) +
+                (0.436 * rgb.B);
+
+            yuv.V =
+                (0.615 * rgb.R) -
+                (0.51499 * rgb.G) -
+                (0.10001 * rgb.B);
+
+            return yuv;
+        }
+
+        public RGBColor YUVToRGB(YUVColor yuv)
+        {
+            RGBColor rgb = new RGBColor();
+
+            rgb.R =
+                yuv.Y +
+                (1.13983 * yuv.V);
+
+            rgb.G =
+                yuv.Y -
+                (0.39465 * yuv.U) -
+                (0.58060 * yuv.V);
+
+            rgb.B =
+                yuv.Y +
+                (2.03211 * yuv.U);
+
+            rgb.R = ClampRGB(rgb.R);
+            rgb.G = ClampRGB(rgb.G);
+            rgb.B = ClampRGB(rgb.B);
+
+            return rgb;
+        }
 
         private double ClampRGB(double value)
         {

@@ -27,6 +27,9 @@ namespace PixalLap
         private YCbCrProcessingService ycbcrProcessingService =
     new YCbCrProcessingService();
 
+        private YUVProcessingService yuvProcessingService =
+    new YUVProcessingService();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -179,6 +182,9 @@ namespace PixalLap
             YCbCrPanel.Visibility =
                  Visibility.Collapsed;
 
+            YUVPanel.Visibility =
+                Visibility.Collapsed;
+
             if (selectedSpace == "RGB")
             {
                 RGBPanel.Visibility =
@@ -198,6 +204,12 @@ namespace PixalLap
             else if (selectedSpace == "YCbCr")
             {
                 YCbCrPanel.Visibility =
+                    Visibility.Visible;
+            }
+
+            else if (selectedSpace == "YUV")
+            {
+                YUVPanel.Visibility =
                     Visibility.Visible;
             }
 
@@ -280,6 +292,30 @@ namespace PixalLap
             RenderCurrentColorSpace();
         }
 
+        private void YUVSlider_ValueChanged(
+    object sender,
+    RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (!IsLoaded)
+                return;
+
+            if (YUVYValueText == null ||
+                UValueText == null ||
+                VValueText == null)
+                return;
+
+            YUVYValueText.Text =
+                YUVYSlider.Value.ToString("0.0");
+
+            UValueText.Text =
+                USlider.Value.ToString("0.0");
+
+            VValueText.Text =
+                VSlider.Value.ToString("0.0");
+
+            RenderCurrentColorSpace();
+        }
+
         private void RenderCurrentColorSpace()
         {
             // حماية
@@ -346,6 +382,16 @@ namespace PixalLap
                         CrSlider.Value);
             }
 
+            //YUV
+            else if (selectedSpace == "YUV")
+            {
+                processedImage =
+                    yuvProcessingService.AdjustYUV(
+                        originalImage,
+                        YUVYSlider.Value,
+                        USlider.Value,
+                        VSlider.Value);
+            }
             // حماية
             if (processedImage == null)
                 return;
