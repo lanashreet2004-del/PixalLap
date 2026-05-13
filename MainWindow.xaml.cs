@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.IO;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using PixalLap.Views;
 
 
 namespace PixalLap
@@ -17,6 +18,7 @@ namespace PixalLap
         private BitmapImage currentImage;
         private bool isResetting = false;
         private string currentImagePath;
+        private ColorSpaceWindow colorSpaceWindow;
 
         private ImageService imageService = new ImageService();
 
@@ -41,6 +43,7 @@ namespace PixalLap
         public MainWindow()
         {
             InitializeComponent();
+
 
         }
 
@@ -578,8 +581,28 @@ namespace PixalLap
                 byte g = pixel[1];
                 byte r = pixel[2];
 
-                // تحديث الـMarker
-                RgbSpaceView.UpdateSelectedColor(r, g, b);
+                colorSpaceWindow?.UpdateSelectedColor(r, g, b);
+
+            }
+        }
+
+
+        private void OpenColorSpaceExplorer_Click(object sender, RoutedEventArgs e)
+        {
+            if (colorSpaceWindow == null)
+            {
+                colorSpaceWindow = new ColorSpaceWindow();
+
+                colorSpaceWindow.Closed += (s, args) =>
+                {
+                    colorSpaceWindow = null;
+                };
+
+                colorSpaceWindow.Show();
+            }
+            else
+            {
+                colorSpaceWindow.Activate();
             }
         }
     }
