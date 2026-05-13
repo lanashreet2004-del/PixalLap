@@ -37,6 +37,7 @@
 
                 <ComboBoxItem Content="RGB Cube"/>
                 <ComboBoxItem Content="RGB Plane"/>
+                <ComboBoxItem Content="HSV Wheel"/>
 
             </ComboBox>
 

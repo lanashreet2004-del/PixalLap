@@ -1,6 +1,7 @@
 ﻿using HelixToolkit.Wpf;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
+using System;
 
 namespace PixalLap.ColorSpaces
 {
@@ -10,6 +11,7 @@ namespace PixalLap.ColorSpaces
 
         private SphereVisual3D selectedMarker;
 
+        public event Action<byte, byte, byte> ColorSelected;
         public RGBSpace3D(HelixViewport3D viewport)
         {
             this.viewport = viewport;
@@ -77,6 +79,7 @@ namespace PixalLap.ColorSpaces
                                     (byte)g,
                                     (byte)b))
                         };
+                       
 
                         viewport.Children.Add(sphere);
                     }

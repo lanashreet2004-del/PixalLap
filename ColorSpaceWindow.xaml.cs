@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using PixalLap.Views;
 using System.Windows.Media;
+using PixalLap.Helpers;
 
 namespace PixalLap
 {
@@ -15,16 +16,46 @@ namespace PixalLap
         }
 
         private void VisualizationComboBox_SelectionChanged(
-            object sender,
-            SelectionChangedEventArgs e)
+    object sender,
+    SelectionChangedEventArgs e)
         {
+            // RGB Cube
             if (VisualizationComboBox.SelectedIndex == 0)
             {
-                VisualizationContent.Content = new RGBSpaceView();
+                RGBSpaceView cubeView = new RGBSpaceView();
+
+                cubeView.ColorSelected += (r, g, b) =>
+                {
+                    UpdateSelectedColor(r, g, b);
+                };
+
+                VisualizationContent.Content = cubeView;
             }
-            else
+
+            // RGB Plane
+            else if (VisualizationComboBox.SelectedIndex == 1)
             {
-                VisualizationContent.Content = new RGBPlaneView();
+                RGBPlaneView planeView = new RGBPlaneView();
+
+                planeView.ColorSelected += (r, g, b) =>
+                {
+                    UpdateSelectedColor(r, g, b);
+                };
+
+                VisualizationContent.Content = planeView;
+            }
+
+            // HSV Wheel
+            else if (VisualizationComboBox.SelectedIndex == 2)
+            {
+                HSVWheelView hsvView = new HSVWheelView();
+
+                hsvView.ColorSelected += (r, g, b) =>
+                {
+                    UpdateSelectedColor(r, g, b);
+                };
+
+                VisualizationContent.Content = hsvView;
             }
         }
         public void UpdateSelectedColor(byte r, byte g, byte b)
@@ -40,6 +71,11 @@ namespace PixalLap
 
 
             }
+
+            if (VisualizationContent.Content is HSVWheelView hsvView)
+            {
+                hsvView.UpdateSelectedColor(r, g, b);
+            }
             // Preview
             SelectedColorPreview.Background =
                 new SolidColorBrush(
@@ -47,6 +83,14 @@ namespace PixalLap
 
             // RGB
             RgbText.Text = $"R: {r}\nG: {g}\nB: {b}";
+
+            var hsv = Helpers.ColorConverter.RGBtoHSV(r, g, b);
+
+            HsvText.Text =
+                $"H : {hsv.H:F1}°\n" +
+                $"S : {hsv.S:F1}%\n" +
+                $"V : {hsv.V:F1}%";
+
         }
     }
 }
