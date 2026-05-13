@@ -8,6 +8,12 @@
         Background="#1E1E1E">
 
     <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="1.3*"/>
+
+        </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -37,7 +43,8 @@
         </StackPanel>
 
         <!-- Visualization Area -->
-        <Border Grid.Row="1"
+        <Border  Grid.Row="1"
+                 Grid.Column="0"
                 Background="Black"
                 CornerRadius="10"
                 Padding="10">
@@ -45,6 +52,88 @@
             <ContentControl x:Name="VisualizationContent"/>
 
         </Border>
+
+        <StackPanel Grid.Row="1"
+            Grid.Column="1"
+            Margin="20,0,0,0">
+
+            <!-- عنوان -->
+            <TextBlock Text="Selected Color"
+               Foreground="White"
+               FontSize="22"
+               FontWeight="Bold"
+               Margin="0,0,0,15"/>
+
+            <!-- معاينة اللون -->
+            <Border x:Name="SelectedColorPreview"
+            Height="80"
+            CornerRadius="10"
+            Background="White"
+            Margin="0,0,0,20"/>
+
+            <!-- RGB -->
+            <Border Background="#2A2A2A"
+            CornerRadius="8"
+            Padding="12"
+            Margin="0,0,0,10">
+
+                <StackPanel>
+
+                    <TextBlock Text="RGB"
+                       Foreground="White"
+                       FontSize="18"
+                       FontWeight="Bold"/>
+
+                    <TextBlock x:Name="RgbText"
+                       Foreground="White"
+                       FontSize="16"/>
+
+                </StackPanel>
+
+            </Border>
+
+            <!-- HSV -->
+            <Border Background="#2A2A2A"
+            CornerRadius="8"
+            Padding="12"
+            Margin="0,0,0,10">
+
+                <StackPanel>
+
+                    <TextBlock Text="HSV"
+                       Foreground="White"
+                       FontSize="18"
+                       FontWeight="Bold"/>
+
+                    <TextBlock x:Name="HsvText"
+                       Foreground="White"
+                       FontSize="16"/>
+
+                </StackPanel>
+
+            </Border>
+
+            <!-- CMYK -->
+            <Border Background="#2A2A2A"
+            CornerRadius="8"
+            Padding="12">
+
+                <StackPanel>
+
+                    <TextBlock Text="CMYK"
+                       Foreground="White"
+                       FontSize="18"
+                       FontWeight="Bold"/>
+
+                    <TextBlock x:Name="CmykText"
+                       Foreground="White"
+                       FontSize="16"/>
+
+                </StackPanel>
+
+            </Border>
+
+        </StackPanel>
 
     </Grid>
 

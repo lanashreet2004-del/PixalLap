@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using PixalLap.Views;
+using System.Windows.Media;
 
 namespace PixalLap
 {
@@ -36,7 +37,16 @@ namespace PixalLap
             if (VisualizationContent.Content is RGBPlaneView planeView)
             {
                 planeView.UpdateSelectedColor(r, g, b);
+
+
             }
+            // Preview
+            SelectedColorPreview.Background =
+                new SolidColorBrush(
+                    Color.FromRgb(r, g, b));
+
+            // RGB
+            RgbText.Text = $"R: {r}\nG: {g}\nB: {b}";
         }
     }
 }
